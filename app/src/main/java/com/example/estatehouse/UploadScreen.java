@@ -95,7 +95,7 @@ public class UploadScreen extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser((intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent,"Select Picture"), PICK_IMAGE_REQUEST);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -110,6 +110,6 @@ public class UploadScreen extends AppCompatActivity {
             catch (IOException e) {
                 e.printStackTrace();
             }
-        }//end if
+        }
     }
 }
