@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginScreeen"
+            android:name=".LoginScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
