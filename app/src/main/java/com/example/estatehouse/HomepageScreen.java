@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -45,7 +43,7 @@ public class HomepageScreen extends AppCompatActivity {
         spinnerCities = findViewById(R.id.spinner_cities);
         rdGroupType = findViewById(R.id.rdGroupType);
         houses = new ArrayList<House>();
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.cart_listView);
 
         ArrayAdapter<CharSequence> adapterCountry = ArrayAdapter.createFromResource(this, R.array.countries, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> adapterCity = ArrayAdapter.createFromResource(this, R.array.cities, android.R.layout.simple_spinner_item);
