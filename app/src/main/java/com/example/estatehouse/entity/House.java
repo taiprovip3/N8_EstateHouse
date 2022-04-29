@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class House {
-    private String name;
+    private String type;
     private double cost;
     private String address;
     private double sale;
@@ -12,14 +12,14 @@ public class House {
     private int bedrooms;
     private int bathrooms;
     private int livingarea;
-    private int image;
+    private String image;
 
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(String name) {
+        this.type = name;
     }
 
     public double getCost() {
@@ -78,19 +78,19 @@ public class House {
         this.livingarea = livingarea;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
     public House() {
     }
 
-    public House(String name, double cost, String address, double sale, List<String> tags, int bedrooms, int bathrooms, int livingarea, int image) {
-        this.name = name;
+    public House(String type, double cost, String address, double sale, List<String> tags, int bedrooms, int bathrooms, int livingarea, String image) {
+        this.type = type;
         this.cost = cost;
         this.address = address;
         this.sale = sale;
@@ -104,7 +104,7 @@ public class House {
     @Override
     public String toString() {
         return "House{" +
-                "name='" + name + '\'' +
+                "name='" + type + '\'' +
                 ", cost=" + cost +
                 ", address='" + address + '\'' +
                 ", sale=" + sale +
@@ -112,7 +112,7 @@ public class House {
                 ", bedrooms=" + bedrooms +
                 ", bathrooms=" + bathrooms +
                 ", livingarea=" + livingarea +
-                ", image=" + image +
+                ", image='" + image + '\'' +
                 '}';
     }
 }

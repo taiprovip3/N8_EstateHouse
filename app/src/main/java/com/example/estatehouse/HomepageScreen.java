@@ -3,20 +3,30 @@ package com.example.estatehouse;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.estatehouse.adapter.HomepageAdapter;
 import com.example.estatehouse.entity.House;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,9 +39,13 @@ public class HomepageScreen extends AppCompatActivity {
     FirebaseFirestore db;
     Spinner spinnerCountries, spinnerCities;
     RadioGroup rdGroupType;
+    RadioButton rdBuy, rdRent;
     List<House> houses;
     ListView listView;
     HomepageAdapter homepageAdapter;
+    ImageView helpView, languageView, sellerView, loginView, homePageView, notiView, profileView;
+    Button btnFilter;
+    private int typeSelectedDefault = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +53,19 @@ public class HomepageScreen extends AppCompatActivity {
         setContentView(R.layout.activity_homepage_screen);
 
         //Ánh xạ
+        helpView = findViewById(R.id.hp_helpIcon);
+        languageView = findViewById(R.id.hp_languageIcon);
+        sellerView = findViewById(R.id.hp_sellerIcon);
+        loginView = findViewById(R.id.hp_loginIcon);
+        homePageView = findViewById(R.id.hp_homePageIcon);
+        notiView = findViewById(R.id.hp_notiIcon);
+        profileView = findViewById(R.id.hp_profileIcon);
         spinnerCountries = findViewById(R.id.spinner_countries);
         spinnerCities = findViewById(R.id.spinner_cities);
         rdGroupType = findViewById(R.id.rdGroupType);
-        houses = new ArrayList<House>();
-        listView = (ListView) findViewById(R.id.cart_listView);
+        btnFilter = findViewById(R.id.hp_btnFilter);
+        rdBuy = findViewById(R.id.radioButtonBuy);
+        rdRent = findViewById(R.id.radioButtonRent);
 
         ArrayAdapter<CharSequence> adapterCountry = ArrayAdapter.createFromResource(this, R.array.countries, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> adapterCity = ArrayAdapter.createFromResource(this, R.array.cities, android.R.layout.simple_spinner_item);
@@ -52,27 +74,107 @@ public class HomepageScreen extends AppCompatActivity {
         spinnerCountries.setAdapter(adapterCountry);
         spinnerCities.setAdapter(adapterCity);
 
+        //setOnClick
+        helpView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(HomepageScreen.this, "Change intent to helpScreen", Toast.LENGTH_LONG).show();
+            }
+        });
+        languageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(HomepageScreen.this, "Language avaiable: US, VN", Toast.LENGTH_LONG).show();
+            }
+        });
+        sellerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(HomepageScreen.this, "Change to 'SellerScreen.java'", Toast.LENGTH_SHORT).show();
+            }
+        });
+        loginView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomepageScreen.this, LoginScreen.class);
+                startActivity(intent);
+            }
+        });
+        homePageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(HomepageScreen.this, "You're here now!", Toast.LENGTH_LONG).show();
+            }
+        });
+        notiView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(HomepageScreen.this, "Notes: some new estate house has just added recently. Check it now", Toast.LENGTH_LONG).show();
+            }
+        });
+        profileView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(HomepageScreen.this, "Change to ProfileScreen", Toast.LENGTH_LONG).show();
+            }
+        });
         rdGroupType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i){
                     case R.id.radioButtonBuy:
                         Toast.makeText(HomepageScreen.this, "Selected Buy", Toast.LENGTH_LONG).show();
+                        typeSelectedDefault = 0;
                         break;
                     case R.id.radioButtonRent:
                         Toast.makeText(HomepageScreen.this, "Selected Rent", Toast.LENGTH_LONG).show();
+                        typeSelectedDefault = 1;
                         break;
                 }
             }
         });
+        btnFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String countrySelected = spinnerCountries.getSelectedItem().toString();
+                String citySelected = spinnerCities.getSelectedItem().toString();
+                String typeSelected = "";
+                if(typeSelectedDefault == 0){
+                    typeSelected = "BUY";
+                } else{
+                    typeSelected = "RENT";
+                }
 
-        House h1 = new House("", 45000, "311, COLOMBIA, NEWYORK, street 12", 1.0, Arrays.asList("colombia", "newyork"), 5, 5, 460, R.drawable.house_description_1);
-        House h2 = new House("", 50000, "312, DOMINICA, LOSANGELES, street 13", 2.0, Arrays.asList("dominica", "losangeles"), 4, 6, 480, R.drawable.house_description_1);
+                Toast.makeText(HomepageScreen.this, countrySelected + "/" + citySelected + "/" + typeSelected, Toast.LENGTH_SHORT).show();
+            }
+        });
+        //Get recommended for new
+        houses = new ArrayList<House>();
+        House h1 = new House("BUY", 45000, "311, COLOMBIA, NEWYORK, street 12", 1.0, Arrays.asList("colombia", "newyork"), 5, 5, 460, "house_description_1");
+        House h2 = new House("RENT", 50000, "312, DOMINICA, LOSANGELES, street 13", 2.0, Arrays.asList("dominica", "losangeles"), 4, 6, 480, "house_started_1");
         houses.add(h1);
         houses.add(h2);
-        homepageAdapter = new HomepageAdapter(houses, HomepageScreen.this);
-        listView.setAdapter(homepageAdapter);
+        db = FirebaseFirestore.getInstance();
+        db.collection("House")
+                .whereArrayContains("tags", "new")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                House house = documentSnapshot.toObject(House.class);
+                                houses.add(house);
+                            }
+                            listView = findViewById(R.id.cart_listView);
+                            homepageAdapter = new HomepageAdapter(houses, HomepageScreen.this);
+                            listView.setAdapter(homepageAdapter);
+                        } else
+                            Log.w("ERROR-FIRE", "Error getting documents.", task.getException());
+                    }
+                });
     }//end onCreate
+
 
     private void addNewDocument(String fn, String ln) {
         Map<String, Object> user = new HashMap<>();
