@@ -9,12 +9,13 @@
         <entry key="..\:/Users/Admin/AndroidStudioProjects/EstateHouse/app/src/main/res/layout/activity_homepage_itemview.xml" value="0.33" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/EstateHouse/app/src/main/res/layout/activity_homepage_screen.xml" value="0.33" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/EstateHouse/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/EstateHouse/app/src/main/res/layout/activity_start_screen.xml" value="0.33" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/EstateHouse/app/src/main/res/layout/activity_upload_screen.xml" value="0.33" />
         <entry key="..\:/Users/Administrator/StudioProjects/N8_EstateHouse/app/src/main/res/layout/activity_upload_screen.xml" value="0.25" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
