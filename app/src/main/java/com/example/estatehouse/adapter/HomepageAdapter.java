@@ -46,20 +46,26 @@ public class HomepageAdapter extends BaseAdapter {
         }
 
         ImageView hpImageView = view.findViewById(R.id.hp_Image);
+        TextView hpTypeView = view.findViewById(R.id.hp_Type);
         TextView hpSaleView = view.findViewById(R.id.hp_Sale);
         TextView hpTagView = view.findViewById(R.id.hp_Tag);
         TextView hpCostView = view.findViewById(R.id.hp_Cost);
 
         House h = houses.get(i);
-        int hpImage = h.getImage();
+        String hpImage = h.getImage();
+        String hpType = h.getType();
         String hpSale = ""+h.getSale();
-//        StringJoiner sj = new StringJoiner(", ", "", "");
-//        for (String tag : h.getTags()) {
-//            sj.add(tag);
-//        }
-        String hpCost = ""+h.getCost();
-        hpImageView.setImageResource(hpImage);
+        String strTags = "";
+        for (String s : h.getTags()){
+            strTags += s + ", ";
+        }
+        String hpCost = "" + h.getCost();
+        Context contextImageView = hpImageView.getContext();
+        int id = contextImageView.getResources().getIdentifier(hpImage, "drawable", contextImageView.getPackageName());
+        hpImageView.setImageResource(id);
+        hpTypeView.setText("Type: "+hpType);
         hpSaleView.setText("-"+hpSale+"%");
+        hpTagView.setText(strTags);
         hpCostView.setText("$"+hpCost+" (USD)");
 
         return view;
