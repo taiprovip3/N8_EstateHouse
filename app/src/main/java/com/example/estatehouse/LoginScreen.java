@@ -48,10 +48,10 @@ public class LoginScreen extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (!task.isSuccessful()){
                                     if (pass.length()<6){
-                                        edit_pass.setError(getString(R.string.minium_password));
+//                                        edit_pass.setError(getString(R.string.minium_password));
                                     }else {
-                                        Toast.makeText(LoginScreen.this,getString(R.string.auth_fail),
-                                                Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(LoginScreen.this,getString(R.string.auth_fail),
+//                                                Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 else {
