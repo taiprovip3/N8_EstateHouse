@@ -53,6 +53,8 @@ public class HomepageScreen extends AppCompatActivity {
         setContentView(R.layout.activity_homepage_screen);
 
         //Ánh xạ
+        db = FirebaseFirestore.getInstance();
+        CollectionReference houseRef = db.collection("House");
         helpView = findViewById(R.id.hp_helpIcon);
         languageView = findViewById(R.id.hp_languageIcon);
         sellerView = findViewById(R.id.hp_sellerIcon);
@@ -66,6 +68,7 @@ public class HomepageScreen extends AppCompatActivity {
         btnFilter = findViewById(R.id.hp_btnFilter);
         rdBuy = findViewById(R.id.radioButtonBuy);
         rdRent = findViewById(R.id.radioButtonRent);
+        listView = findViewById(R.id.cart_listView);
 
         ArrayAdapter<CharSequence> adapterCountry = ArrayAdapter.createFromResource(this, R.array.countries, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> adapterCity = ArrayAdapter.createFromResource(this, R.array.cities, android.R.layout.simple_spinner_item);
@@ -123,11 +126,9 @@ public class HomepageScreen extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i){
                     case R.id.radioButtonBuy:
-                        Toast.makeText(HomepageScreen.this, "Selected Buy", Toast.LENGTH_LONG).show();
                         typeSelectedDefault = 0;
                         break;
                     case R.id.radioButtonRent:
-                        Toast.makeText(HomepageScreen.this, "Selected Rent", Toast.LENGTH_LONG).show();
                         typeSelectedDefault = 1;
                         break;
                 }
@@ -139,24 +140,40 @@ public class HomepageScreen extends AppCompatActivity {
                 String countrySelected = spinnerCountries.getSelectedItem().toString();
                 String citySelected = spinnerCities.getSelectedItem().toString();
                 String typeSelected = "";
-                if(typeSelectedDefault == 0){
+                if(typeSelectedDefault == 0)
                     typeSelected = "BUY";
-                } else{
+                else
                     typeSelected = "RENT";
-                }
-
-                Toast.makeText(HomepageScreen.this, countrySelected + "/" + citySelected + "/" + typeSelected, Toast.LENGTH_SHORT).show();
+                if(!countrySelected.equalsIgnoreCase("Select country") && !citySelected.equalsIgnoreCase("Select city")){
+                    Toast.makeText(HomepageScreen.this, "Querying...", Toast.LENGTH_LONG).show();
+                    houseRef.whereArrayContainsAny("tags", Arrays.asList(countrySelected, citySelected))
+                            .whereEqualTo("type", typeSelected)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        houses.clear();
+                                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                            House house = documentSnapshot.toObject(House.class);
+                                            houses.add(house);
+                                            Log.d("FILTERRED", house.toString());
+                                        }
+                                        homepageAdapter = new HomepageAdapter(houses, HomepageScreen.this);
+                                        listView.setAdapter(homepageAdapter);
+                                    } else Log.w("ERROR-FIRE", "Error getting documents.", task.getException());
+                                }
+                            });
+                }//end if
             }
         });
         //Get recommended for new
         houses = new ArrayList<House>();
-        House h1 = new House("BUY", 45000, "311, COLOMBIA, NEWYORK, street 12", 1.0, Arrays.asList("colombia", "newyork"), 5, 5, 460, "house_description_1");
-        House h2 = new House("RENT", 50000, "312, DOMINICA, LOSANGELES, street 13", 2.0, Arrays.asList("dominica", "losangeles"), 4, 6, 480, "house_started_1");
-        houses.add(h1);
-        houses.add(h2);
-        db = FirebaseFirestore.getInstance();
-        db.collection("House")
-                .whereArrayContains("tags", "new")
+        House h1 = new House("BUY", 45000, "311, COLOMBIA, NEWYORK, Street 12", 1.0, Arrays.asList("COLOMBIA", "NEWYORK", "NEW"), 5, 5, 460, "house_description_1");
+        House h2 = new House("RENT", 50000, "312, DOMINICA, LOSANGELES, Street 13", 2.0, Arrays.asList("DOMINICA", "LOSANGELES", "NEW"), 4, 6, 480, "house_started_1");
+//        houses.add(h1);
+//        houses.add(h2);
+        houseRef.whereArrayContains("tags", "NEW")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -166,7 +183,6 @@ public class HomepageScreen extends AppCompatActivity {
                                 House house = documentSnapshot.toObject(House.class);
                                 houses.add(house);
                             }
-                            listView = findViewById(R.id.cart_listView);
                             homepageAdapter = new HomepageAdapter(houses, HomepageScreen.this);
                             listView.setAdapter(homepageAdapter);
                         } else
