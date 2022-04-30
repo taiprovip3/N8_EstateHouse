@@ -50,7 +50,7 @@ public class HomepageScreen extends AppCompatActivity {
     private int typeSelectedDefault = 0;
     AlertDialog dialogLanguage;
     AlertDialog.Builder builderLanguage;
-    String[] languages = {"US", "VN"};
+    String[] languages = {"US (default)", "VN"};
     String languageSelected = "";
 
     @Override

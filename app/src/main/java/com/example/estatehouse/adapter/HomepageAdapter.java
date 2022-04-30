@@ -1,6 +1,7 @@
 package com.example.estatehouse.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,11 @@ import android.widget.TextView;
 
 import com.example.estatehouse.R;
 import com.example.estatehouse.entity.House;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.StringJoiner;
@@ -52,7 +58,7 @@ public class HomepageAdapter extends BaseAdapter {
         TextView hpCostView = view.findViewById(R.id.hp_Cost);
 
         House h = houses.get(i);
-        String hpImage = h.getImage();
+//        String hpImage = h.getImage();
         String hpType = h.getType();
         String hpSale = ""+h.getSale();
         String strTags = "";
@@ -60,14 +66,26 @@ public class HomepageAdapter extends BaseAdapter {
             strTags += s + ", ";
         }
         String hpCost = "" + h.getCost();
-        Context contextImageView = hpImageView.getContext();
-        int id = contextImageView.getResources().getIdentifier(hpImage, "drawable", contextImageView.getPackageName());
-        hpImageView.setImageResource(id);
-        hpTypeView.setText("Type: "+hpType);
+//        Context contextImageView = hpImageView.getContext();
+//        int id = contextImageView.getResources().getIdentifier(hpImage, "drawable", contextImageView.getPackageName());
+//        hpImageView.setImageResource(id);
+        hpTypeView.setText(hpType);
         hpSaleView.setText("-"+hpSale+"%");
         hpTagView.setText(strTags);
-        hpCostView.setText("$"+hpCost+" (USD)");
+        hpCostView.setText("$"+hpCost);
 
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReferenceFromUrl("gs://estatehouse-4ee84.appspot.com");
+        StorageReference imageReference = storageReference.child("images/"+h.getImage());
+        imageReference.getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get()
+                                .load(uri)
+                                .into(hpImageView);
+                    }
+                });
         return view;
     }
 }

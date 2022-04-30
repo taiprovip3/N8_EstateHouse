@@ -297,12 +297,4 @@
         app:layout_constraintTop_toBottomOf="@+id/textView39"
         app:srcCompat="@drawable/can_ho_nha_mat_dat_1_1" />
 
-    <TextView
-        android:id="@+id/sll_imageName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="house10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView39" />
 </androidx.constraintlayout.widget.ConstraintLayout>
