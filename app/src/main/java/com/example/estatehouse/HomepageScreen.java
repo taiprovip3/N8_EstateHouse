@@ -1,8 +1,10 @@
 package com.example.estatehouse;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,6 +48,10 @@ public class HomepageScreen extends AppCompatActivity {
     ImageView helpView, languageView, sellerView, loginView, homePageView, notiView, profileView;
     Button btnFilter;
     private int typeSelectedDefault = 0;
+    AlertDialog dialogLanguage;
+    AlertDialog.Builder builderLanguage;
+    String[] languages = {"US", "VN"};
+    String languageSelected = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,19 +87,42 @@ public class HomepageScreen extends AppCompatActivity {
         helpView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(HomepageScreen.this, "Change intent to helpScreen", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(HomepageScreen.this, HelpScreen.class);
+                startActivity(intent);
             }
         });
         languageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(HomepageScreen.this, "Language avaiable: US, VN", Toast.LENGTH_LONG).show();
+                builderLanguage = new AlertDialog.Builder(HomepageScreen.this);
+                builderLanguage.setTitle("Avaiable languages ...");
+                builderLanguage.setSingleChoiceItems(languages, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        languageSelected = languages[i];
+                    }
+                });
+                builderLanguage.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                builderLanguage.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(HomepageScreen.this, "Your language have been changed to :: " + languageSelected, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialogLanguage = builderLanguage.create();
+                dialogLanguage.show();
             }
         });
         sellerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(HomepageScreen.this, "Change to 'SellerScreen.java'", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomepageScreen.this, SellerScreen.class);
+                startActivity(intent);
             }
         });
         loginView.setOnClickListener(new View.OnClickListener() {
@@ -189,6 +218,7 @@ public class HomepageScreen extends AppCompatActivity {
                             Log.w("ERROR-FIRE", "Error getting documents.", task.getException());
                     }
                 });
+
     }//end onCreate
 
 
