@@ -1,15 +1,19 @@
 package com.example.estatehouse.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.estatehouse.DetailScreen;
 import com.example.estatehouse.R;
 import com.example.estatehouse.entity.House;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -18,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -58,7 +63,6 @@ public class HomepageAdapter extends BaseAdapter {
         TextView hpCostView = view.findViewById(R.id.hp_Cost);
 
         House h = houses.get(i);
-//        String hpImage = h.getImage();
         String hpType = h.getType();
         String hpSale = ""+h.getSale();
         String strTags = "";
@@ -89,7 +93,20 @@ public class HomepageAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Toast.makeText(context, h.toString(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, DetailScreen.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("imageHouse", h.getImage());
+                bundle.putDouble("priceHouse", h.getCost());
+                bundle.putString("addressHouse", h.getAddress());
+                bundle.putInt("bedroomHouse", h.getBedrooms());
+                bundle.putInt("bathroomHouse", h.getBathrooms());
+                bundle.putInt("livingareaHouse", h.getLivingarea());
+                bundle.putString("documentIdHouse", h.getDocumentId());
+                bundle.putString("descriptionHouse", h.getDescription());
+                bundle.putString("sellerHouse", h.getSeller());
+                intent.putExtras(bundle);
+                context.startActivity(intent);
             }
         });
         return view;

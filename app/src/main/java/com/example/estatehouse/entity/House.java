@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class House {
+    private String documentId;
     private String type;
     private double cost;
     private String address;
@@ -13,6 +14,32 @@ public class House {
     private int bathrooms;
     private int livingarea;
     private String image;
+    private String description;
+    private String seller;
+
+    public String getSeller() {
+        return seller;
+    }
+
+    public void setSeller(String seller) {
+        this.seller = seller;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getType() {
         return type;
@@ -89,7 +116,8 @@ public class House {
     public House() {
     }
 
-    public House(String type, double cost, String address, double sale, List<String> tags, int bedrooms, int bathrooms, int livingarea, String image) {
+    public House(String documentId, String type, double cost, String address, double sale, List<String> tags, int bedrooms, int bathrooms, int livingarea, String image, String description, String seller) {
+        this.documentId = documentId;
         this.type = type;
         this.cost = cost;
         this.address = address;
@@ -99,12 +127,15 @@ public class House {
         this.bathrooms = bathrooms;
         this.livingarea = livingarea;
         this.image = image;
+        this.description = description;
+        this.seller = seller;
     }
 
     @Override
     public String toString() {
         return "House{" +
-                "name='" + type + '\'' +
+                "documentId='" + documentId + '\'' +
+                ", type='" + type + '\'' +
                 ", cost=" + cost +
                 ", address='" + address + '\'' +
                 ", sale=" + sale +
@@ -113,6 +144,8 @@ public class House {
                 ", bathrooms=" + bathrooms +
                 ", livingarea=" + livingarea +
                 ", image='" + image + '\'' +
+                ", description='" + description + '\'' +
+                ", seller='" + seller + '\'' +
                 '}';
     }
 }

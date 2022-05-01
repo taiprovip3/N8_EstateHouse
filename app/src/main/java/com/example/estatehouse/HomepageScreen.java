@@ -45,7 +45,6 @@ public class HomepageScreen extends AppCompatActivity {
     HomepageAdapter homepageAdapter;
     ImageView helpView, languageView, sellerView, loginView, homePageView, notiView, profileView;
     Button btnFilter;
-    ImageView hp_notiIcon;
     private int typeSelectedDefault = 0;
 
     @Override
@@ -70,14 +69,6 @@ public class HomepageScreen extends AppCompatActivity {
         rdBuy = findViewById(R.id.radioButtonBuy);
         rdRent = findViewById(R.id.radioButtonRent);
         listView = findViewById(R.id.cart_listView);
-        hp_notiIcon=findViewById(R.id.hp_notiIcon);
-        hp_notiIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(HomepageScreen.this,NoticScreen.class);
-                startActivity(intent);
-            }
-        });
 
         ArrayAdapter<CharSequence> adapterCountry = ArrayAdapter.createFromResource(this, R.array.countries, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> adapterCity = ArrayAdapter.createFromResource(this, R.array.cities, android.R.layout.simple_spinner_item);
