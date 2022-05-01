@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
@@ -68,17 +69,17 @@ public class RegisterScreen extends AppCompatActivity {
                 rePassword=txtRePassword.getText().toString();
                 if(email.equals("")){
                     Toast.makeText(RegisterScreen.this, "Enter email",
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(password.equals("")){
                     Toast.makeText(RegisterScreen.this, "Enter password",
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(rePassword.equals("")){
                     Toast.makeText(RegisterScreen.this, "Enter re-enter password",
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(password.equals(rePassword)){
@@ -88,41 +89,32 @@ public class RegisterScreen extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@Nonnull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        Map<String, Object> userObject = new HashMap<>();
-                                        userObject.put("email", email);
-                                        userObject.put("password", password);
-                                        userObject.put("first_name", "Un");
-                                        userObject.put("last_name", "know");
-                                        userObject.put("role", "member");
-                                        userObject.put("location", "US");
-                                        userObject.put("phone_number", "");
-                                        userObject.put("balance", 0.0);
-                                        userObject.put("avatar", "image_6.png");
-                                        userReference.add(userObject)
-                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                    @Override
-                                                    public void onSuccess(DocumentReference documentReference) {
-                                                        Toast.makeText(RegisterScreen.this, "Register success",
-                                                                Toast.LENGTH_SHORT).show();
-                                                        emptyField();
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.d("REGISTER FAILED", "User email "+email+" can't write to database");
-                                                    }
-                                                });
+                                        String documentId = UUID.randomUUID().toString();
+                                        User user = new User();
+                                        user.setDocumentId(documentId);
+                                        user.setEmail(email);
+                                        user.setAvatar("image_6.png");
+                                        user.setBalance(0.0);
+                                        user.setFirstName("Un");
+                                        user.setLastName("know");
+                                        user.setLocation("VN");
+                                        user.setPassword(password);
+                                        user.setPhonenumber("+84");
+                                        user.setRole("member");
+                                        userReference.document(documentId).set(user);
+                                        Toast.makeText(RegisterScreen.this, "Register success",
+                                                Toast.LENGTH_LONG).show();
+                                        emptyField();
                                     } else {
                                         Toast.makeText(RegisterScreen.this, "Register failed",
-                                                Toast.LENGTH_SHORT).show();
+                                                Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
                 }
                 else{
                     Toast.makeText(RegisterScreen.this, "Password and Repassword are not the same",
-                            Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
