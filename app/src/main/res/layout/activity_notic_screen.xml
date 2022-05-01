@@ -4,6 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E1C6C6"
     tools:context=".NoticScreen">
 
+    <ImageView
+        android:id="@+id/btn_img"
+        android:layout_width="0dp"
+        android:layout_height="97dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/grouphomepage" />
 </androidx.constraintlayout.widget.ConstraintLayout>
