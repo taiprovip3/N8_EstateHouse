@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +22,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -41,11 +39,11 @@ public class ProfieScreen extends AppCompatActivity {
     private FirebaseFirestore db;
     private CollectionReference userReference;
 
-    private ImageView avatarView;
+    private ImageView avatarView, uploadView;
     private TextView fullNameView, roleView, btnUpdateProfile;
     private EditText edEmail, edFirstName, edLastName, edPhoneNumber, edPassword;
     private Spinner spinnerLocation;
-    private Button btnBack;
+    private Button btnBack, btnYourCart;
     private ArrayAdapter<CharSequence> adapterLocation;
 
     private User user;
@@ -68,11 +66,24 @@ public class ProfieScreen extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         btnUpdateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateProfile();
+            }
+        });
+        btnYourCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfieScreen.this, CartScreen.class);
+                startActivity(intent);
+            }
+        });
+        uploadView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfieScreen.this, UploadScreen.class);
+                startActivity(intent);
             }
         });
     }
@@ -144,6 +155,7 @@ public class ProfieScreen extends AppCompatActivity {
 
         user = new User();
         avatarView = findViewById(R.id.pr_imageAvatar);
+        uploadView = findViewById(R.id.pr_uploadImage);
         fullNameView = findViewById(R.id.pr_txtFullName);
         roleView = findViewById(R.id.pr_txtRole);
         edEmail = findViewById(R.id.pr_edEmail);
@@ -154,5 +166,6 @@ public class ProfieScreen extends AppCompatActivity {
         spinnerLocation = findViewById(R.id.pr_spinnerLocation);
         btnBack = findViewById(R.id.pr_btnBack);
         btnUpdateProfile = findViewById(R.id.pr_updateProfile);
+        btnYourCart = findViewById(R.id.pr_btnYourCart);
     }
 }

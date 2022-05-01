@@ -1,12 +1,23 @@
 package com.example.estatehouse;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.estatehouse.adapter.CartAdapter;
 import com.example.estatehouse.entity.HouseCart;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,23 +27,38 @@ public class CartScreen extends AppCompatActivity {
     List<HouseCart> houseCarts;
     ListView listView;
     CartAdapter cartAdapter;
+    FirebaseFirestore db;
+    CollectionReference cartReference;
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart_screen);
 
-        //Ánh xạ
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        cartReference = db.collection("carts");
         houseCarts = new ArrayList<HouseCart>();
         listView = (ListView) findViewById(R.id.cart_listView);
-
-        HouseCart h1 = new HouseCart(39000, "Yankol1995", 4,5,380, R.drawable.image_26);
-        HouseCart h2 = new HouseCart(41000, "IllusiousMagic", 5,6,385, R.drawable.image_26);
-        HouseCart h3 = new HouseCart(39000, "Navigator_Anaconda", 3,3,390, R.drawable.image_26);
-        houseCarts.add(h1);
-        houseCarts.add(h2);
-        houseCarts.add(h3);
-        cartAdapter = new CartAdapter(houseCarts, CartScreen.this);
-        listView.setAdapter(cartAdapter);
+        cartReference
+                .whereEqualTo("email", currentUser.getEmail())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                HouseCart cart = documentSnapshot.toObject(HouseCart.class);
+                                houseCarts.add(cart);
+                            }
+                            cartAdapter = new CartAdapter(houseCarts, CartScreen.this);
+                            listView.setAdapter(cartAdapter);
+                        }else
+                            Log.w("ERROR-GET-FIRESTORE", "Error getting documents.", task.getException());
+                    }
+                });
     }
 }

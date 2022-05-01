@@ -1,19 +1,37 @@
 package com.example.estatehouse.entity;
 
 public class HouseCart {
-    private double price;
+    private String documentId;
+    private String email;
+    private double cost;
     private String seller;
     private int bedrooms;
     private int bathrooms;
     private int livingarea;
-    private int image;
+    private String image;
 
-    public double getPrice() {
-        return price;
+    public String getDocumentId() {
+        return documentId;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 
     public String getSeller() {
@@ -48,19 +66,21 @@ public class HouseCart {
         this.livingarea = livingarea;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
     public HouseCart() {
     }
 
-    public HouseCart(double price, String seller, int bedrooms, int bathrooms, int livingarea, int image) {
-        this.price = price;
+    public HouseCart(String documentId, String email, double cost, String seller, int bedrooms, int bathrooms, int livingarea, String image) {
+        this.documentId = documentId;
+        this.email = email;
+        this.cost = cost;
         this.seller = seller;
         this.bedrooms = bedrooms;
         this.bathrooms = bathrooms;
@@ -71,12 +91,14 @@ public class HouseCart {
     @Override
     public String toString() {
         return "HouseCart{" +
-                "price=" + price +
+                "documentId='" + documentId + '\'' +
+                ", email='" + email + '\'' +
+                ", cost=" + cost +
                 ", seller='" + seller + '\'' +
                 ", bedrooms=" + bedrooms +
                 ", bathrooms=" + bathrooms +
                 ", livingarea=" + livingarea +
-                ", image=" + image +
+                ", image='" + image + '\'' +
                 '}';
     }
 }

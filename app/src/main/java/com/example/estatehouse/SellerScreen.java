@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 import com.example.estatehouse.entity.House;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,16 +40,18 @@ import java.util.UUID;
 
 public class SellerScreen extends AppCompatActivity {
 
-    Button btnReset, btnRegister;
-    EditText edType, edPrice, edAddress, edSale, edTags, edBedroom, edBathroom, edLivingArea;
-    ImageView homePage, imageChosen;
-    TextView btnChooseImage;
-    private Uri filePath;
-    private final int PICK_IMAGE_REQUEST = 71;
     FirebaseFirestore db;
     CollectionReference houseRef;
     FirebaseStorage storage;
     StorageReference storageReference, ref;
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+    Button btnReset, btnRegister;
+    EditText edType, edPrice, edAddress, edSale, edTags, edDescription, edBedroom, edBathroom, edLivingArea;
+    ImageView homePage, imageChosen;
+    TextView btnChooseImage;
+    private Uri filePath;
+    private final int PICK_IMAGE_REQUEST = 71;
     String randomImageSelectedNameGenerated = "";
 
     @Override
@@ -54,10 +59,11 @@ public class SellerScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seller_screen);
 
+        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        houseRef = db.collection("House");
+        houseRef = db.collection("houses");
         btnChooseImage = findViewById(R.id.sll_btnChooseImage);
         btnReset = findViewById(R.id.sll_btnReset);
         btnRegister = findViewById(R.id.sll_btnRegister);
@@ -66,6 +72,7 @@ public class SellerScreen extends AppCompatActivity {
         edAddress = findViewById(R.id.sll_edAddress);
         edSale = findViewById(R.id.sll_edSale);
         edTags = findViewById(R.id.sll_edTags);
+        edDescription = findViewById(R.id.sll_edDescription);
         edBedroom = findViewById(R.id.sll_edBedroom);
         edBathroom = findViewById(R.id.sll_edBathroom);
         edLivingArea = findViewById(R.id.sll_edLivingArea);
@@ -100,11 +107,14 @@ public class SellerScreen extends AppCompatActivity {
                 String address = edAddress.getText().toString();
                 int sale = Integer.parseInt(edSale.getText().toString());
                 List<String> tags = Arrays.asList("NEW", edTags.getText().toString());
+                String description = edDescription.getText().toString();
                 int bedroom = Integer.parseInt(edBedroom.getText().toString());
                 int bathroom = Integer.parseInt(edBathroom.getText().toString());
                 int livingArea = Integer.parseInt(edLivingArea.getText().toString());
-                if(dataIsValid(type, price, address, sale, tags, bedroom, bathroom, livingArea)){
+                if(dataIsValid(type, price, address, sale, tags, description, bedroom, bathroom, livingArea)){
                     randomImageSelectedNameGenerated = UUID.randomUUID().toString();
+                    currentUser = mAuth.getCurrentUser();
+                    String seller = currentUser.getEmail();
                     Map<String, Object> data = new HashMap<>();
                     data.put("type", type);
                     data.put("cost", price);
@@ -115,11 +125,14 @@ public class SellerScreen extends AppCompatActivity {
                     data.put("bathrooms", bathroom);
                     data.put("livingarea", livingArea);
                     data.put("image", randomImageSelectedNameGenerated);
+                    data.put("description", "This is the beautifull place to take a braek with your family daily off!");
+                    data.put("seller", seller);
+                    data.put("documentId", "");
                     houseRef.add(data)
                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
                                 public void onSuccess(DocumentReference documentReference) {
-                                    Toast.makeText(SellerScreen.this, "Register product successfully", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(SellerScreen.this, "Register successfully product :: " + documentReference.getId(), Toast.LENGTH_LONG).show();
                                     uploadImage();
                                     emptyField();
                                 }
@@ -127,7 +140,7 @@ public class SellerScreen extends AppCompatActivity {
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(SellerScreen.this, "Register product failed", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(SellerScreen.this, "Register product failed. can't put", Toast.LENGTH_LONG).show();
                                 }
                             });
                 } else Toast.makeText(SellerScreen.this, "Please fill out fields required!", Toast.LENGTH_LONG).show();
@@ -190,7 +203,7 @@ public class SellerScreen extends AppCompatActivity {
         }
     }
 
-    private boolean dataIsValid(String type, double price, String address, int sale, List<String> tags, int bedroom, int bathroom, int livingArea) {
+    private boolean dataIsValid(String type, double price, String address, int sale, List<String> tags, String description, int bedroom, int bathroom, int livingArea) {
         if(!type.equals("BUY") && !type.equals("RENT")){
             Toast.makeText(this, "Type must be 'BUY' or 'RENT' (case sensitive)", Toast.LENGTH_SHORT).show();
             return false;
@@ -207,6 +220,10 @@ public class SellerScreen extends AppCompatActivity {
             Toast.makeText(this, "0 < Sale < 100", Toast.LENGTH_LONG).show();
             return false;
         }
+        if(description.equalsIgnoreCase("")){
+            Toast.makeText(this, "Please describe your description", Toast.LENGTH_LONG).show();
+            return false;
+        }
         if(bedroom <= 0 || bathroom <= 0 || livingArea <= 0){
             Toast.makeText(this, "Bed, bath, area must not be negative", Toast.LENGTH_LONG).show();
             return false;
@@ -220,6 +237,7 @@ public class SellerScreen extends AppCompatActivity {
         edAddress.setText("");
         edSale.setText("");
         edTags.setText("");
+        edDescription.setText("");
         edBedroom.setText("");
         edBathroom.setText("");
         edLivingArea.setText("");

@@ -60,15 +60,11 @@
         app:srcCompat="@drawable/image_6" />
 
     <ImageView
-        android:id="@+id/imageView28"
+        android:id="@+id/pr_uploadImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="@+id/pr_imageAvatar"
-        app:layout_constraintEnd_toEndOf="@+id/pr_imageAvatar"
-        app:layout_constraintStart_toStartOf="@+id/pr_imageAvatar"
-        app:layout_constraintTop_toTopOf="@+id/pr_imageAvatar"
+        app:layout_constraintStart_toEndOf="@+id/pr_imageAvatar"
         app:srcCompat="@drawable/image_7" />
 
     <TextView
@@ -124,7 +120,7 @@
         app:layout_constraintTop_toBottomOf="@+id/pr_txtRole" />
 
     <Button
-        android:id="@+id/button9"
+        android:id="@+id/pr_btnYourCart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -151,12 +147,12 @@
         app:layout_constraintTop_toBottomOf="@+id/button" />
 
     <EditText
-        android:enabled="false"
         android:id="@+id/pr_edEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:ems="10"
+        android:enabled="false"
         android:hint="Type your email address"
         android:inputType="textEmailAddress"
         android:minHeight="48dp"

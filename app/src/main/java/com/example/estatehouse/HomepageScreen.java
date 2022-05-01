@@ -64,7 +64,6 @@ public class HomepageScreen extends AppCompatActivity {
     String[] languages = {"US (default)", "VN"};
     String languageSelected = "";
     TextView txtViewHelp, txtViewLanguage, txtViewSeller, txtViewlogin, txtViewTitle, txtViewLocation, txtViewType, txtViewRecommend, txtViewHomepage, txtViewNoti, txtViewProfile;
-
     TextView [] componentTextView;
     List<TextView> arrayTextViewComponent;
     String [] componentVNTranslate;
@@ -136,8 +135,13 @@ public class HomepageScreen extends AppCompatActivity {
         sellerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomepageScreen.this, SellerScreen.class);
-                startActivity(intent);
+                if(isLogged()){
+                    Intent intent = new Intent(HomepageScreen.this, SellerScreen.class);
+                    startActivity(intent);
+                } else{
+                    Intent intent = new Intent(HomepageScreen.this, LoginScreen.class);
+                    startActivity(intent);
+                }
             }
         });
         loginView.setOnClickListener(new View.OnClickListener() {
@@ -231,12 +235,9 @@ public class HomepageScreen extends AppCompatActivity {
                 }//end if
             }
         });
+
         //Get recommended for new
         houses = new ArrayList<House>();
-        House h1 = new House("BUY", 45000, "311, COLOMBIA, NEWYORK, Street 12", 1.0, Arrays.asList("COLOMBIA", "NEWYORK", "NEW"), 5, 5, 460, "house_description_1");
-        House h2 = new House("RENT", 50000, "312, DOMINICA, LOSANGELES, Street 13", 2.0, Arrays.asList("DOMINICA", "LOSANGELES", "NEW"), 4, 6, 480, "house_started_1");
-//        houses.add(h1);
-//        houses.add(h2);
         houseRef.whereArrayContains("tags", "NEW")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -245,6 +246,7 @@ public class HomepageScreen extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                                 House house = documentSnapshot.toObject(House.class);
+                                house.setDocumentId(documentSnapshot.getId());
                                 houses.add(house);
                             }
                             homepageAdapter = new HomepageAdapter(houses, HomepageScreen.this);
@@ -281,7 +283,7 @@ public class HomepageScreen extends AppCompatActivity {
     private void anhXa() {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        houseRef = db.collection("House");
+        houseRef = db.collection("houses");
         helpView = findViewById(R.id.hp_helpIcon);
         languageView = findViewById(R.id.hp_languageIcon);
         sellerView = findViewById(R.id.hp_sellerIcon);
