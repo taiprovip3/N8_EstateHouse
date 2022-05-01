@@ -61,6 +61,7 @@ public class LoginScreen extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(),"Login failed",Toast.LENGTH_SHORT).show();
                                 }
                                 else {
+                                    Toast.makeText(LoginScreen.this, "Login successully, we redirect you to homepage", Toast.LENGTH_LONG).show();
                                     Intent intent=new Intent(LoginScreen.this,HomepageScreen.class);
                                     startActivity(intent);
                                     finish();

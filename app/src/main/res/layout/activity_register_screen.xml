@@ -8,7 +8,7 @@
     android:background="@drawable/gradient_background">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/hp_txtViewHelp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -38,9 +38,9 @@
         android:textColor="@color/black"
         android:textColorHint="#57000000"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintEnd_toEndOf="@+id/hp_txtViewHelp"
+        app:layout_constraintStart_toStartOf="@+id/hp_txtViewHelp"
+        app:layout_constraintTop_toBottomOf="@+id/hp_txtViewHelp" />
 
     <Button
         android:id="@+id/btnRegister"
@@ -58,7 +58,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtRePassword" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/hp_txtViewLanguage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -69,7 +69,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
 
     <TextView
-        android:id="@+id/txtLoginHere"
+        android:id="@+id/hp_txtViewLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -77,9 +77,9 @@
         android:textColor="#FA5A5A"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        app:layout_constraintBottom_toBottomOf="@+id/hp_txtViewLanguage"
+        app:layout_constraintStart_toEndOf="@+id/hp_txtViewLanguage"
+        app:layout_constraintTop_toTopOf="@+id/hp_txtViewLanguage" />
 
     <ImageView
         android:id="@+id/hp_helpIcon"
@@ -87,8 +87,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/hp_txtViewLanguage"
+        app:layout_constraintTop_toBottomOf="@+id/hp_txtViewLanguage"
         app:srcCompat="@drawable/img1" />
 
     <ImageView
