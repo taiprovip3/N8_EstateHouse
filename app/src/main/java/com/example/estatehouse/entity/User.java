@@ -1,6 +1,7 @@
 package com.example.estatehouse.entity;
 
 public class User {
+    private String documentId;
     private String email;
     private String firstName;
     private String lastName;
@@ -10,6 +11,14 @@ public class User {
     private String password;
     private double balance;
     private String avatar;
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
 
     public String getEmail() {
         return email;
@@ -84,16 +93,17 @@ public class User {
     }
 
     public User() {
-        this.firstName = "Un";
+        this.firstName = "un";
         this.lastName = "know";
         this.role = "member";
         this.location = "US";
         this.phonenumber = "";
-        this.balance = 0;
+        this.balance = 0.0;
         this.avatar = "image_6.png";
     }
 
-    public User(String email, String firstName, String lastName, String role, String location, String phonenumber, String password, double balance, String avatar) {
+    public User(String documentId, String email, String firstName, String lastName, String role, String location, String phonenumber, String password, double balance, String avatar) {
+        this.documentId = documentId;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -108,7 +118,8 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "email='" + email + '\'' +
+                "documentId='" + documentId + '\'' +
+                ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", role='" + role + '\'' +

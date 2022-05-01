@@ -18,4 +18,8 @@
         <item>PHOENIX</item>
         <item>DALLAS</item>
     </string-array>
+    <string-array name="locations">
+        <item>US</item>
+        <item>VN</item>
+    </string-array>
 </resources>

@@ -143,14 +143,16 @@ public class HomepageScreen extends AppCompatActivity {
         loginView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomepageScreen.this, LoginScreen.class);
-                startActivity(intent);
+                if(!isLogged()){
+                    Intent intent = new Intent(HomepageScreen.this, LoginScreen.class);
+                    startActivity(intent);
+                }
             }
         });
         txtViewlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentUser != null){
+                if(isLogged()){
                     txtViewlogin.setText("Login");
                     mAuth.signOut();
                     Intent intent = new Intent(HomepageScreen.this, LoginScreen.class);
@@ -174,8 +176,13 @@ public class HomepageScreen extends AppCompatActivity {
         profileView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomepageScreen.this, ProfieScreen.class);
-                startActivity(intent);
+                if(isLogged()){
+                    Intent intent = new Intent(HomepageScreen.this, ProfieScreen.class);
+                    startActivity(intent);
+                } else{
+                    Intent intent = new Intent(HomepageScreen.this, LoginScreen.class);
+                    startActivity(intent);
+                }
             }
         });
         rdGroupType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -252,13 +259,24 @@ public class HomepageScreen extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if(isLogged()){
             txtViewlogin.setText("Logout");
             txtViewlogin.getPaint().setUnderlineText(true);
             txtViewlogin.setTextColor(Color.BLUE);
+
+        } else{
+            txtViewlogin.setText("Login");
+            txtViewlogin.getPaint().setUnderlineText(false);
+            txtViewlogin.setTextColor(Color.BLACK);
         }
     }//end onCreate
+
+    private boolean isLogged() {
+        currentUser = mAuth.getCurrentUser();
+        if(currentUser == null)
+            return false;
+        return true;
+    }
 
     private void anhXa() {
         db = FirebaseFirestore.getInstance();
