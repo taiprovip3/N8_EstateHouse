@@ -112,7 +112,9 @@ public class HomepageScreen extends AppCompatActivity {
         notiView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(HomepageScreen.this, "Notes: some new estate house has just added recently. Check it now", Toast.LENGTH_LONG).show();
+//                Toast.makeText(HomepageScreen.this, "Notes: some new estate house has just added recently. Check it now", Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(HomepageScreen.this,NoticScreen.class);
+                startActivity(intent);
             }
         });
         profileView.setOnClickListener(new View.OnClickListener() {
