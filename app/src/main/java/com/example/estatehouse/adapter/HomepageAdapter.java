@@ -86,6 +86,12 @@ public class HomepageAdapter extends BaseAdapter {
                                 .into(hpImageView);
                     }
                 });
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         return view;
     }
 }

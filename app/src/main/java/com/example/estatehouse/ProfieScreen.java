@@ -46,6 +46,7 @@ public class ProfieScreen extends AppCompatActivity {
     private EditText edEmail, edFirstName, edLastName, edPhoneNumber, edPassword;
     private Spinner spinnerLocation;
     private Button btnBack;
+    private ArrayAdapter<CharSequence> adapterLocation;
 
     private User user;
 
@@ -56,7 +57,7 @@ public class ProfieScreen extends AppCompatActivity {
 
         anhXa();
 
-        ArrayAdapter<CharSequence> adapterLocation = ArrayAdapter.createFromResource(this, R.array.locations, android.R.layout.simple_spinner_item);
+        adapterLocation = ArrayAdapter.createFromResource(this, R.array.locations, android.R.layout.simple_spinner_item);
         adapterLocation.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerLocation.setAdapter(adapterLocation);
 
@@ -104,6 +105,7 @@ public class ProfieScreen extends AppCompatActivity {
                                     edEmail.setText(user.getEmail());
                                     edFirstName.setText(user.getFirstName());
                                     edLastName.setText(user.getLastName());
+                                    spinnerLocation.setSelection(adapterLocation.getPosition(user.getLocation()));
                                     edPhoneNumber.setText(user.getPhonenumber());
                                     edPassword.setText(user.getPassword());
                                 }
@@ -111,19 +113,19 @@ public class ProfieScreen extends AppCompatActivity {
                                 Toast.makeText(ProfieScreen.this, "GET DOCUMENT FAILED", Toast.LENGTH_LONG).show();
                         }
                     });
-
         }
     }
 
     private void updateProfile() {
-        User temp = new User();
-        temp.setFirstName(edFirstName.getText().toString());
-        temp.setLastName(edLastName.getText().toString());
-        temp.setLocation(spinnerLocation.getSelectedItem().toString());
-        temp.setPhonenumber(edPhoneNumber.getText().toString());
-        temp.setPassword(edPassword.getText().toString());
-        userReference.document(user.getDocumentId()).set(temp);
+        user.setFirstName(edFirstName.getText().toString());
+        user.setLastName(edLastName.getText().toString());
+        user.setLocation(spinnerLocation.getSelectedItem().toString());
+        user.setPhonenumber(edPhoneNumber.getText().toString());
+        user.setPassword(edPassword.getText().toString());
+        userReference.document(user.getDocumentId()).set(user);
         Toast.makeText(this, "Update profile success", Toast.LENGTH_LONG).show();
+        finish();
+        startActivity(getIntent());
     }
 
     private boolean isLogged() {
